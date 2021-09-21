@@ -1,0 +1,45 @@
+<script src="https://www.desmos.com/api/v1.6/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+<html>
+	<head>
+		<title>Desmos | Graphing Calculator</title>
+		<link rel="icon" href="https://www.desmos.com/favicon.ico">
+	</head>
+	
+	<body style="margin: 0;">
+		<div id="calculator"></div>
+	</body>
+
+	<script>
+		const element = document.getElementById("calculator");
+		const calculator = Desmos.GraphingCalculator(element);
+
+		// Fetch data
+		fetch("http://localhost/data")
+			.then((response) => response.json())
+			.then((data) => {
+				// Plot the upperBound, lowerBound, and bestFit lines
+				calculator.setExpression({
+					id: "upperBound",
+					latex: data.upperBound
+				});
+				calculator.setExpression({
+					id: "lowerBound",
+					latex: data.lowerBound
+				});
+				calculator.setExpression({
+					id: "bestFit",
+					latex: data.bestFit
+				});
+
+				// For every point in the dataset, plot it
+				data.points.forEach((point, index) => {
+					calculator.setExpression({
+						id: `point${index}`,
+						latex: `(${point.x}, ${point.y})`
+					});
+				})
+			})
+
+		
+	</script>
+</html>
